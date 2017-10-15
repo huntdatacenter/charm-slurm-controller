@@ -1,0 +1,177 @@
+options:
+  mpi_default:
+    type: string
+    default: none
+    description: >-
+      'Identifies the default type of MPI to be used. Srun may override this
+      configuration parameter in any case. Currently supported versions include:
+      lam, mpich1_p4, mpich1_shmem, mpichgm, mpichmx, mvapich, none (default,
+      which works for many other versions of MPI) and openmpi. pmi2, More
+      information about MPI use is available here mpi_guide.'
+  slurmctld_pid_file:
+    type: string
+    default: /var/run/slurm-llnl/slurmctld.pid
+    description: >-
+      'Fully qualified pathname of a file into which the slurmctld daemon may
+      write its process id. This may be used for automated signal processing.
+      The default value is "/var/run/slurmctld.pid".'
+  slurmctld_port:
+    type: int
+    default: 6817
+    description: >-
+      'The port number that the Slurm controller, slurmctld, listens to for
+      work. The default value is SLURMCTLD_PORT as established at system build
+      time. If none is explicitly specified, it will be set to 6817.
+      SlurmctldPort may also be configured to support a range of port numbers in
+      order to accept larger bursts of incoming messages by specifying two
+      numbers separated by a dash (e.g. SlurmctldPort=6817-6818). NOTE:  Either
+      slurmctld and slurmd daemons must not execute on the same nodes or the
+      values of SlurmctldPort and SlurmdPort must be different.'
+  slurmd_pid_file:
+    type: string
+    default: /var/run/slurm-llnl/slurmd.pid
+    description: >-
+      'Fully qualified pathname of a file into which the slurmd daemon may write
+      its process id. This may be used for automated signal processing. Any "%h"
+      within the name is replaced with the hostname on which the slurmd is
+      running. Any "%n" within the name is replaced with the Slurm node name on
+      which the slurmd is running. The default value is "/var/run/slurmd.pid".'
+  slurmd_port:
+    type: int
+    default: 6818
+    description: >-
+      'The port number that the Slurm compute node daemon, slurmd, listens to
+      for work. The default value is SLURMD_PORT as established at system build
+      time. If none is explicitly specified, its value will be 6818. NOTE:
+      Either slurmctld and slurmd daemons must not execute on the same nodes or
+      the values of SlurmctldPort and SlurmdPort must be different.'
+  slurmd_spool_dir:
+    type: string
+    default: /var/spool/slurmd.spool
+    description: >-
+      'Fully qualified pathname of a directory into which the slurmd daemon's
+      state information and batch job script information are written. This must
+      be a common pathname for all nodes, but should represent a directory which
+      is local to each node (reference a local file system). The default value
+      is "/var/spool/slurmd". Any "%h" within the name is replaced with the
+      hostname on which the slurmd is running. Any "%n" within the name is
+      replaced with the Slurm node name on which the slurmd is running.'
+  slurm_user:
+    type: string
+    default: slurm
+    description: >-
+      The name of the user that the slurmctld daemon executes as. For security
+      purposes, a user other than "root" is recommended. This user must exist on
+      all nodes of the cluster for authentication of communications between
+      Slurm components. The default value is "root".
+  state_save_location:
+    type: string
+    default: /var/spool/slurm.state
+    description: >-
+      'Fully qualified pathname of a directory into which the Slurm controller,
+      slurmctld, saves its state (e.g. "/usr/local/slurm/checkpoint"). Slurm
+      state will saved here to recover from system failures. SlurmUser must be
+      able to create files in this directory. If you have a BackupController
+      configured, this location should be readable and writable by both systems.
+      Since all running and pending job information is stored here, the use of a
+      reliable file system (e.g. RAID) is recommended. The default value is
+      "/var/spool". If any slurm daemons terminate abnormally, their core files
+      will also be written into this directory.'
+  kill_wait:
+    type: int
+    default: 30
+    description: >-
+      'The interval, in seconds, given to a job's processes between the SIGTERM
+      and SIGKILL signals upon reaching its time limit. If the job fails to
+      terminate gracefully in the interval specified, it will be forcibly
+      terminated. The default value is 30 seconds. The value may not exceed
+      65533.'
+  min_job_age:
+    type: int
+    default: 300
+    description: >-
+      "The minimum age of a completed job before its record is purged from
+      Slurm's active database. Set the values of MaxJobCount and to insure the
+      slurmctld daemon does not exhaust its memory or other resources. The
+      default value is 300 seconds. A value of zero prevents any job record
+      purging. In order to eliminate some possible race conditions, the minimum
+      non-zero value for MinJobAge recommended is 2."
+  slurmctld_timeout:
+    type: int
+    default: 120
+    description: >-
+      'The interval, in seconds, that the backup controller waits for the
+      primary controller to respond before assuming control. The default value
+      is 120 seconds. May not exceed 65533.'
+  slurmd_timeout:
+    type: int
+    default: 300
+    description: >-
+      'The interval, in seconds, that the Slurm controller waits for slurmd to
+      respond before configuring that node's state to DOWN. A value of zero
+      indicates the node will not be tested by slurmctld to confirm the state of
+      slurmd, the node will not be automatically set to a DOWN state indicating
+      a non-responsive slurmd, and some other tool will take responsibility for
+      monitoring the state of each compute node and its slurmd daemon. Slurm's
+      hierarchical communication mechanism is used to ping the slurmd daemons in
+      order to minimize system noise and overhead. The default value is 300
+      seconds. The value may not exceed 65533 seconds.'
+  scheduler_type:
+    type: string
+    default: sched/backfill
+    description: >-
+      'Identifies the type of scheduler to be used. Note the slurmctld daemon
+      must be restarted for a change in scheduler type to become effective
+      (reconfiguring a running daemon has no effect for this parameter). The
+      scontrol command can be used to manually change job priorities if desired.
+      Acceptable values include: sched/backfill For a backfill scheduling module
+      to augment the default FIFO scheduling. Backfill scheduling will initiate
+      lower-priority jobs if doing so does not delay the expected initiation
+      time of any higher priority job. Effectiveness of backfill scheduling is
+      dependent upon users specifying job time limits, otherwise all jobs will
+      have the same time limit and backfilling is impossible. Note documentation
+      for the SchedulerParameters option above. This is the default
+      configuration. sched/builtin This is the FIFO scheduler which initiates
+      jobs in priority order. If any job in the partition can not be scheduled,
+      no lower priority job in that partition will be scheduled. An exception is
+      made for jobs that can not run due to partition constraints (e.g. the time
+      limit) or down/drained nodes. In that case, lower priority jobs can be
+      initiated and not impact the higher priority job. sched/hold To hold all
+      newly arriving jobs if a file "/etc/slurm.hold" exists otherwise use the
+      built-in FIFO scheduler'
+  clustername:
+    type: string
+    default: cluster1
+    description: >-
+      Name to be recorded in database for jobs from this cluster.  This is
+      important if a single database is used to record information  from
+      multiple Slurm-managed clusters.
+  slurmctld_debug:
+    type: string
+    default: info
+    description: >-
+      "The level of detail to provide slurmctld daemon's logs. The default value
+      is info. If the slurmctld daemon is initiated with -v or --verbose
+      options, that debug level will be preserve or restored upon
+      reconfiguration."
+  slurmctld_log_file:
+    type: string
+    default: /var/log/slurm-llnl/slurmctld.log
+    description: >-
+      "Fully qualified pathname of a file into which the slurmctld daemon's logs
+      are written. The default value is none (performs logging via syslog)."
+  slurmd_log_file:
+    type: string
+    default: /var/log/slurm-llnl/slurmd.log
+    description: >-
+      'Fully qualified pathname of a file into which the slurmd daemon's logs
+      are written. The default value is none (performs logging via syslog). Any
+      "%h" within the name is replaced with the hostname on which the slurmd is
+      running. Any "%n" within the name is replaced with the Slurm node name on
+      which the slurmd is running.'
+  slurmd_debug:
+    type: string
+    default: info
+    description: >-
+      "The level of detail to provide slurmd daemon's logs. The default value is
+      info."
