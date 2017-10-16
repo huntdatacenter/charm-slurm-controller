@@ -2,6 +2,7 @@
 flake8
 isort
 flake8-isort
+
 # Testing
 bundletester
 # charm-tools due to https://github.com/juju/charm-tools/issues/304 and https://github.com/juju/charm-tools/pull/302

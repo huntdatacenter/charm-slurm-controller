@@ -5,7 +5,7 @@ export CHARM_BUILD_DIR=./builds
 export CHARM_DEPS_DIR=./deps
 
 # TARGETS
-lint: clean ## Run linter
+lint: ## Run linter
 	tox -e lint
 
 smoke-test: build ## Run smoke tests
