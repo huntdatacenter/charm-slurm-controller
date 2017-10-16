@@ -5,10 +5,13 @@ export CHARM_BUILD_DIR=./builds
 export CHARM_DEPS_DIR=./deps
 
 # TARGETS
-lint: ## Run linter
-	tox -e pep8
+lint: clean ## Run linter
+	tox -e lint
 
-test: build ## Run integration tests
+smoke-test: build ## Run smoke tests
+	tox -e smoke
+
+integration-test: build ## Run integration tests
 	tox -e integration
 
 build: clean ## Build charm
@@ -40,7 +43,7 @@ help:
 .SILENT:
 # Use one shell for all commands in a target recipe
 .ONESHELL:
-# Set phony targets
-.PHONY: help
+# Set default goal
+.DEFAULT_GOAL := help
 # Use bash shell in Make instead of sh 
 SHELL=/bin/bash

@@ -1,0 +1,49 @@
+#!/usr/bin/env python
+
+import os
+import unittest
+import amulet
+
+
+class TestCharm(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        """Set up deployment.
+
+        This will be called only once during the Test class.
+        """
+        # Get env variables
+        cls.charm_name = os.environ.get('CHARM_NAME')
+        cls.charm_store_group = os.environ.get('CHARM_STORE_GROUP')
+        cls.charm_build_dir = os.environ.get('CHARM_BUILD_DIR')
+
+        # Generate paths to locally built charms
+        cls.charm_path = os.path.join(cls.charm_build_dir, cls.charm_name)
+
+        # Setup Amulet deployment
+        cls.d = amulet.Deployment(series='xenial')
+
+        # Add services
+        cls.d.add(service_name=cls.charm_name, charm=cls.charm_path)
+
+        # Deploy services
+        cls.d.setup()
+        cls.d.sentry.wait()
+
+        # Get Slurm controller
+        cls.controller = cls.d.sentry[cls.charm_name][0]
+
+    def setUp(self):
+        """This will be called before each test method."""
+        pass
+
+    def test_10_change_config(self):
+        self.d.configure(self.charm_name, {
+            'slurmd_debug': 'debug',
+        })
+        self.d.sentry.wait()
+
+
+if __name__ == '__main__':
+    unittest.main(verbosity=2)

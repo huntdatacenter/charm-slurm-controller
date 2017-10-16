@@ -1,10 +1,10 @@
 name: slurm-controller
 summary: <Fill in summary here>
-maintainer: zeestrat <zeestrat@vagrant.vm>
+maintainer: Sandor Zeestraten <sandor.zeestraten@ntnu.no>
 description: |
   <Multi-line description here>
 tags:
-  - misc
+  - slurm
 subordinate: false
 series:
   - xenial

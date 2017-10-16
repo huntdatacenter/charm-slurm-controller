@@ -1,26 +1,36 @@
-sudo: required
 dist: trusty
+sudo: required
 language: python
-env:
-  - JUJU_CHANNEL=stable
-  - JUJU_CHANNEL=candidate
-  - JUJU_CHANNEL=beta
+jobs:
+  include:
+    # Linter
+    - stage: lint
+      sudo: false
+      install: pip install tox
+      script: make lint
+    # Smoke tests
+    - stage: smoketest
+      env: JUJU_CHANNEL=stable
+    - stage: smoketest
+      env: JUJU_CHANNEL=candidate
+    - stage: smoketest
+      env: JUJU_CHANNEL=beta
 matrix:
   allow_failures:
     - env: JUJU_CHANNEL=candidate
     - env: JUJU_CHANNEL=beta
-before_install:
+install:
   # Add repositories
   - sudo add-apt-repository -y ppa:ubuntu-lxc/lxd-stable
   - sudo apt-get -qq update
-install:
   # Install packages
   - sudo apt-get -y install lxd snapd
-  - sudo snap install juju --classic --channel=$JUJU_CHANNEL
   - pip install tox
-before_script:
+  - sudo snap install juju --classic --channel=$JUJU_CHANNEL
+  # Install candidate version of charm due to https://github.com/juju/charm-tools/issues/356
+  - sudo snap install charm --candidate
   # Setup LXD
-  - sudo service lxd restart
+  - sudo service lxd start
   - sudo lxd init --auto
   - sudo usermod -a -G lxd travis
   # Changing user as a workaround for https://github.com/travis-ci/travis-ci/issues/1839
@@ -32,6 +42,6 @@ before_script:
                        juju bootstrap localhost'
 script:
   - sudo su travis -c 'export PATH=$PATH:/snap/bin &&
-                       make test'
+                       make smoke-test'
 notifications:
   email: false
