@@ -1,8 +1,9 @@
 # VARIABLES
-export CHARM_NAME=slurm-controller
-export CHARM_STORE_GROUP=slurm-charmers
-export CHARM_BUILD_DIR=./builds
-export CHARM_DEPS_DIR=./deps
+export PATH := /snap/bin:$(PATH)
+export CHARM_NAME := slurm-controller
+export CHARM_STORE_GROUP := slurm-charmers
+export CHARM_BUILD_DIR := ./builds
+export CHARM_DEPS_DIR := ./deps
 
 # TARGETS
 lint: ## Run linter
@@ -46,4 +47,4 @@ help:
 # Set default goal
 .DEFAULT_GOAL := help
 # Use bash shell in Make instead of sh 
-SHELL=/bin/bash
+SHELL := /bin/bash

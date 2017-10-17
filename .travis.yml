@@ -1,6 +1,7 @@
 dist: trusty
 sudo: required
 language: python
+python: 3.5
 jobs:
   include:
     # Linter
@@ -8,12 +9,27 @@ jobs:
       sudo: false
       install: pip install tox
       script: make lint
+
     # Smoke tests
-    - stage: smoketest
+    - stage: smoke test
+      script: make smoke-test
       env: JUJU_CHANNEL=stable
-    - stage: smoketest
+    - stage: smoke test
+      script: make smoke-test
       env: JUJU_CHANNEL=candidate
-    - stage: smoketest
+    - stage: smoke test
+      script: make smoke-test
+      env: JUJU_CHANNEL=beta
+
+    # Integration tests
+    - stage: integration test
+      script: make integration-test
+      env: JUJU_CHANNEL=stable
+    - stage: integration test
+      script: make integration-test
+      env: JUJU_CHANNEL=candidate
+    - stage: integration test
+      script: make integration-test
       env: JUJU_CHANNEL=beta
 matrix:
   allow_failures:
@@ -37,12 +53,6 @@ install:
   - sudo su travis -c 'lxc network create lxdbr0'
   - sudo su travis -c 'lxc network attach-profile lxdbr0 default eth0'
   # Bootstrap Juju. Need to export path to snap because of workaround above
-  - sudo su travis -c 'export PATH=$PATH:/snap/bin &&
-                       juju bootstrap localhost'
-script:
-  # TODO: Fix tox path?
-  # /bin/bash: tox: command not found
-  - sudo su travis -c 'export PATH=$PATH:/snap/bin &&
-                       make smoke-test'
+  - sudo su travis -c 'export PATH=$PATH:/snap/bin && juju bootstrap localhost'
 notifications:
   email: false
