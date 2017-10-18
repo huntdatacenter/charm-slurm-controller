@@ -9,7 +9,7 @@ matrix:
 stages:
   - lint
   - smoke tests
-  - integration tests
+  # - integration tests
   - name: push to charm store
     if: branch = master
 jobs:
@@ -33,15 +33,15 @@ jobs:
       env: JUJU_CHANNEL=beta
 
     # Integration tests
-    - stage: integration tests
-      script: make integration-test
-      env: JUJU_CHANNEL=stable
-    - stage: integration tests
-      script: make integration-test
-      env: JUJU_CHANNEL=candidate
-    - stage: integration tests
-      script: make integration-test
-      env: JUJU_CHANNEL=beta
+    # - stage: integration tests
+    #   script: make integration-test
+    #   env: JUJU_CHANNEL=stable
+    # - stage: integration tests
+    #   script: make integration-test
+    #   env: JUJU_CHANNEL=candidate
+    # - stage: integration tests
+    #   script: make integration-test
+    #   env: JUJU_CHANNEL=beta
 
     # Push to charm store
     - stage: push to charm store
