@@ -11,24 +11,24 @@ jobs:
       script: make lint
 
     # Smoke tests
-    - stage: smoke test
+    - stage: smoke tests
       script: make smoke-test
       env: JUJU_CHANNEL=stable
-    - stage: smoke test
+    - stage: smoke tests
       script: make smoke-test
       env: JUJU_CHANNEL=candidate
-    - stage: smoke test
+    - stage: smoke tests
       script: make smoke-test
       env: JUJU_CHANNEL=beta
 
     # Integration tests
-    - stage: integration test
+    - stage: integration tests
       script: make integration-test
       env: JUJU_CHANNEL=stable
-    - stage: integration test
+    - stage: integration tests
       script: make integration-test
       env: JUJU_CHANNEL=candidate
-    - stage: integration test
+    - stage: integration tests
       script: make integration-test
       env: JUJU_CHANNEL=beta
 matrix:
