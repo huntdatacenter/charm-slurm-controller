@@ -51,8 +51,8 @@ jobs:
         # Setup token, see https://github.com/juju/charmstore-client/issues/145
         - echo $CHARM_STORE_TOKEN | base64 --decode > ~/.local/share/juju/store-usso-token
         # Login to charm store
-        - charm login
-        - charm whoami
+        - /snap/bin/charm login
+        - /snap/bin/charm whoami
       script: make push
       env:
         # CHARM_STORE_TOKEN
