@@ -49,7 +49,7 @@ jobs:
         # Make sure .local/share/juju dir is created
         - /snap/bin/juju version 
         # Setup token, see https://github.com/juju/charmstore-client/issues/145
-        - echo $CHARM_STORE_TOKEN | base64 --decode > ~/.local/share/juju/store-usso-token
+        - echo $CHARM_STORE_TOKEN | base64 --decode > ~/.local/share/juju/store-usso-token
         # Login to charm store
         - charm login
         - charm whoami
@@ -62,7 +62,7 @@ install:
   - sudo add-apt-repository -y ppa:ubuntu-lxc/lxd-stable
   - sudo apt-get -qq update
   # Install packages
-  - sudo apt-get -y install lxd snapd python-tox coreutils
+  - sudo apt-get -y install lxd snapd python-tox
   - sudo snap install juju --classic --channel=$JUJU_CHANNEL
   # Install candidate version of charm due to https://github.com/juju/charm-tools/issues/356
   - sudo snap install charm --candidate
