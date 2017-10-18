@@ -4,8 +4,9 @@ import os
 import unittest
 import amulet
 
-# Now you can use self.d.sentry[SERVICE][UNIT] to address each of the units and perform
-# more in-depth steps. Each self.d.sentry[SERVICE][UNIT] has the following methods:
+# Now you can use self.d.sentry[SERVICE][UNIT] to address each of the units
+# and perform more in-depth steps.
+# Each self.d.sentry[SERVICE][UNIT] has the following methods:
 # - .info - An array of the information of that unit from Juju
 # - .file(PATH) - Get the details of a file on that unit
 # - .file_contents(PATH) - Get plain text output of PATH file from that unit
@@ -86,8 +87,9 @@ class TestCharm(unittest.TestCase):
 
     def _run_slurm_srun_checks(self):
         for node in self.d.sentry['slurm-node']:
-            node_hostname = node.relation('slurm-cluster',
-                                          'slurm-controller:slurm-cluster')['hostname']
+            node_hostname = node.relation(
+                'slurm-cluster',
+                'slurm-controller:slurm-cluster')['hostname']
             output, exit_code = self.controller.run(
                 'srun --nodelist={} hostname'.format(node_hostname))
             self.assertEqual(exit_code, 0)

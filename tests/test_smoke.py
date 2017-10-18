@@ -7,10 +7,10 @@ from juju.model import Model
 @pytest.mark.asyncio
 async def test_deploy():
     # Get env variables
-    charm_name = os.environ.get('CHARM_NAME')
-    charm_build_dir = os.environ.get('CHARM_BUILD_DIR')
+    CHARM_NAME = os.environ.get('CHARM_NAME')
+    CHARM_BUILD_DIR = os.environ.get('CHARM_BUILD_DIR')
     # Generate paths to locally built charms
-    charm_path = os.path.join(charm_build_dir, charm_name)
+    CHARM_PATH = os.path.join(CHARM_BUILD_DIR, CHARM_NAME)
 
     model = Model()
     print('Connecting to model')
@@ -19,10 +19,10 @@ async def test_deploy():
     await model.reset(force=True)
 
     try:
-        print('Deploying slurm-controller')
+        print('Deploying {}'.format(CHARM_NAME))
         application = await model.deploy(
-            charm_path,
-            application_name='slurm-controller'
+            CHARM_PATH,
+            application_name=CHARM_NAME
         )
 
         print('Waiting for active')
@@ -30,7 +30,7 @@ async def test_deploy():
             lambda: all(unit.workload_status == 'blocked'
                         for unit in application.units))
 
-        print('Removing slurm-controller')
+        print('Removing {}'.format(CHARM_NAME))
         await application.remove()
     finally:
         print('Disconnecting from model')
