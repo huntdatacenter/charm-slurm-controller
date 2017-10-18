@@ -27,8 +27,10 @@ upgrade: build ## Upgrade charm
 force-upgrade: build ## Force upgrade charm
 	juju upgrade-charm $(CHARM_NAME) --path $(CHARM_BUILD_DIR)/$(CHARM_NAME) --force-units
 
-push: ## Push charm to charm store
-	charm push $(CHARM_BUILD_DIR)/$(CHARM_NAME) cs:~$(CHARM_STORE_GROUP)/$(CHARM_NAME) --channel edge
+push: build ## Push and release charm to edge channel on charm store
+	charm push $(CHARM_BUILD_DIR)/$(CHARM_NAME) cs:~$(CHARM_STORE_GROUP)/$(CHARM_NAME) > charm_push_output.txt
+	CHARM_STORE_URL=$(awk 'NR==1{print $2}' charm_push_output.txt)
+	charm release $(CHARM_STORE_URL) --channel edge
 
 clean: ## Remove .tox and build dirs
 	rm -rf .tox/
