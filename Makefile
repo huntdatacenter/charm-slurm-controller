@@ -31,9 +31,7 @@ force-upgrade: build ## Force upgrade charm
 push: build ## Push and release charm to edge channel on charm store
 	charm push $(CHARM_BUILD_DIR)/$(CHARM_NAME) cs:~$(CHARM_STORE_GROUP)/$(CHARM_NAME) > $(CHARM_PUSH_RESULT)
 	cat $(CHARM_PUSH_RESULT)
-	CHARM_STORE_URL=$$(awk 'NR==1{print $$2}' $(CHARM_PUSH_RESULT))
-	charm release $$CHARM_STORE_URL --channel edge
-
+	awk 'NR==1{print $$2}' $(CHARM_PUSH_RESULT) | xargs -I{} charm release {} --channel edge
 
 clean: ## Remove .tox and build dirs
 	rm -rf .tox/

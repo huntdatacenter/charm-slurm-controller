@@ -9,7 +9,6 @@ matrix:
 stages:
   - lint
   - smoke tests
-  # - integration tests
   - name: push to charm store
     if: branch = master
 jobs:
@@ -32,26 +31,13 @@ jobs:
       script: make smoke-test
       env: JUJU_CHANNEL=beta
 
-    # Integration tests
-    # - stage: integration tests
-    #   script: make integration-test
-    #   env: JUJU_CHANNEL=stable
-    # - stage: integration tests
-    #   script: make integration-test
-    #   env: JUJU_CHANNEL=candidate
-    # - stage: integration tests
-    #   script: make integration-test
-    #   env: JUJU_CHANNEL=beta
-
     # Push to charm store
     - stage: push to charm store
       before_script:
-        - /snap/bin/charm version
         # Make sure /snap/.local/share/juju dir is created
         - mkdir -p ~/snap/charm/current/.local/share/juju 
         # Setup token, see https://github.com/juju/charmstore-client/issues/145
         - echo $CHARM_STORE_TOKEN | base64 --decode > ~/snap/charm/current/.local/share/juju/store-usso-token
-        - ls -la ~/snap/charm/current/.local/share/juju/store-usso-token
         # Login to charm store
         - /snap/bin/charm login
         - /snap/bin/charm whoami
