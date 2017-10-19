@@ -46,10 +46,10 @@ jobs:
     # Push to charm store
     - stage: push to charm store
       before_script:
-        # Make sure .local/share/juju dir is created
-        - /snap/bin/juju version 
+        # Make sure /snap/.local/share/juju dir is created
+        - mkdir -p ~/snap/charm/current/.local/share/juju 
         # Setup token, see https://github.com/juju/charmstore-client/issues/145
-        - echo $CHARM_STORE_TOKEN | base64 --decode > ~/.local/share/juju/store-usso-token
+        - echo $CHARM_STORE_TOKEN | base64 --decode > ~/snap/charm/current/.local/share/juju/store-usso-token
         # Login to charm store
         - /snap/bin/charm login
         - /snap/bin/charm whoami
