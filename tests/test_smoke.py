@@ -8,9 +8,7 @@ from juju.model import Model
 async def test_deploy():
     # Get env variables
     CHARM_NAME = os.environ.get('CHARM_NAME')
-    CHARM_BUILD_DIR = os.environ.get('CHARM_BUILD_DIR')
-    # Generate paths to locally built charms
-    CHARM_PATH = os.path.join(CHARM_BUILD_DIR, CHARM_NAME)
+    CHARM_PATH = os.path.join(os.environ.get('CHARM_BUILD_DIR'), CHARM_NAME)
 
     model = Model()
     print('Connecting to model')
@@ -19,11 +17,9 @@ async def test_deploy():
     await model.reset(force=True)
 
     try:
-        print('Deploying {}'.format(CHARM_NAME))
-        application = await model.deploy(
-            CHARM_PATH,
-            application_name=CHARM_NAME
-        )
+        print('Deploying {} from {}'.format(CHARM_NAME, CHARM_PATH))
+        application = await model.deploy(entity_url=CHARM_PATH,
+                                         application_name=CHARM_NAME)
 
         print('Waiting for active')
         await model.block_until(

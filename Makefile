@@ -29,6 +29,8 @@ force-upgrade: build ## Force upgrade charm
 	juju upgrade-charm $(CHARM_NAME) --path $(CHARM_BUILD_DIR)/$(CHARM_NAME) --force-units
 
 push: build ## Push and release charm to edge channel on charm store
+	# See bug for why we can't push straight to edge
+	# https://github.com/juju/charmstore-client/issues/146
 	charm push $(CHARM_BUILD_DIR)/$(CHARM_NAME) cs:~$(CHARM_STORE_GROUP)/$(CHARM_NAME) > $(CHARM_PUSH_RESULT)
 	cat $(CHARM_PUSH_RESULT)
 	awk 'NR==1{print $$2}' $(CHARM_PUSH_RESULT) | xargs -I{} charm release {} --channel edge

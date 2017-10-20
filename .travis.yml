@@ -34,10 +34,13 @@ jobs:
     # Push to charm store
     - stage: push to charm store
       before_script:
+        # Handle charm store tokens. See bugs below for why this is the way
+        # https://github.com/juju/charmstore-client/issues/145
+        # https://github.com/juju/charmstore-client/issues/146
         - /snap/bin/charm version
         # Make sure /snap/.local/share/juju dir is created
-        - mkdir -p ~/snap/charm/current/.local/share/juju 
-        # Setup token, see https://github.com/juju/charmstore-client/issues/145
+        - mkdir -p ~/snap/charm/current/.local/share/juju
+        # Setup token
         - echo $CHARM_STORE_TOKEN | base64 --decode > ~/snap/charm/current/.local/share/juju/store-usso-token
         # Login to charm store
         - /snap/bin/charm login
@@ -47,7 +50,7 @@ jobs:
         # CHARM_STORE_TOKEN
         - secure: "Ep4s92VQgDIAzEtF3VdOhxx5HLpVsyTmzbhBGOm4hIXfHyqjNgcf4lW5frPKcMg6ZdkeSKDjGWmR5LRoagy2AnKo8CNnr9vIjKGmEYqxkn+Xr2CbFv4HwVeNUpNjUUrT4thQWAAP0hYAkzVK8oayjoFl+loFGT6LtIPW2OTfDgV+Gj49WxfAsqQSmGUOhyRcC2vM57BzMwIk60nWgaJGgRlDWP0wMmdK0rSWXwVAlNZUx+e/uGyv1f7QIV8Fhiw1MyAeuKGm1J/AeBDxG9IcX6Gcks3ylmFwdPWOi85d9QebpOfm6zoma8uimIznz0RhzrwBEqU0HDpHy2LGwrYJBtxDKs48zXKzo6Sa6sL0N3fxM6Oj/0O8etiFQK9Qzr4y3lJ3jB+A7CigIWGRJPcbDwWQowoTCXOtvbPy+Pgc6JwwnoR19ouYSHyQjb5JIAuwUZnVoqqqLwgKnyu1s+DNG8M1YWG4BFcO2gcicLF8T6Ts6s667ZGV2Om3DMmkf1Nk2rI/u3vUbgSCHER/hEVhnK75xVRvSoG+JDqWsKQHHTaHRRTcayshCP/qdE0Ecl1RX45HNr6jeP7L3RcdhNSSu6NM+JNAmG2a1fhuGR4u0rutobK4ywJALOgAqRKG4d7lK1eYHFZZTffKhi9MbDdLBJk0fXjN4dqvDP+MTeCzda4="
 install:
-  # Add repositories
+  # Add lxd repository as travis only has 14.04
   - sudo add-apt-repository -y ppa:ubuntu-lxc/lxd-stable
   - sudo apt-get -qq update
   # Install packages
@@ -64,7 +67,7 @@ install:
   - sudo su travis -c 'lxc network create lxdbr0'
   - sudo su travis -c 'lxc network attach-profile lxdbr0 default eth0'
 before_script:
-  # Bootstrap Juju. Need to export path to snap because of workaround above
-  - sudo su travis -c 'export PATH=$PATH:/snap/bin && juju bootstrap localhost'
+  # Bootstrap juju
+  - sudo su travis -c '/snap/binjuju bootstrap localhost'
 notifications:
   email: false
