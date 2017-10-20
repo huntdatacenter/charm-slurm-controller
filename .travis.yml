@@ -68,6 +68,6 @@ install:
   - sudo su travis -c 'lxc network attach-profile lxdbr0 default eth0'
 before_script:
   # Bootstrap juju
-  - sudo su travis -c '/snap/binjuju bootstrap localhost'
+  - sudo su travis -c '/snap/bin/juju bootstrap localhost'
 notifications:
   email: false
