@@ -8,6 +8,7 @@ tags:
 subordinate: false
 series:
   - xenial
+  - bionic
 provides:
   slurm-cluster:
     interface: slurm-cluster

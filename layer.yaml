@@ -1,4 +1,4 @@
 includes:
   - 'layer:slurm'
   - 'interface:slurm-cluster'
-repo: 'https://github.com/hunt-genes/charm-slurm-controller'
+repo: 'https://github.com/omnivector-solutions/charm-slurm-controller'
